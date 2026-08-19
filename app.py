@@ -1,5 +1,4 @@
 from flask import Flask,session,render_template,send_file,request,jsonify
-# from modules.video_audio_tools import video_tools,audio_tools
 from modules.pdf_doc_tools import pdf_tools,document_tools
 from werkzeug.utils import secure_filename
 from io import BytesIO
@@ -12,7 +11,7 @@ import os
 app = Flask(__name__)
 app.secret_key = 'secret-key-for-now'
 
-UPLOAD_FOLDER = os.path.join('static', 'uploads')
+UPLOAD_FOLDER = os.path.join('temp', 'uploads')
 os.makedirs(UPLOAD_FOLDER ,exist_ok=True)
 
 #I will handle file extensions in fronted as well
@@ -25,7 +24,6 @@ ALLOWED_EXTENSIONS = {
 }
 
 def allowed_file(filename, file_type=None):
-    """Check if file extension is allowed"""
     if '.' not in filename:
         return False
     
@@ -186,36 +184,6 @@ def process_files(tool_name):
     elif tool_name == 'csv_to_jsonl':
         tool = document_tools(paths = valid_files,output_folder = output_folder)
         results = tool.CSV_to_JSONL()
-
-    # Video Tools:=
-    # elif tool_name == 'video_to_audio':
-    #     tool = video_tools(paths = valid_files,output_folder = output_folder, extension = needed_arg)
-    #     results = tool.video_to_audio()
-
-    # elif tool_name == 'combine_video_clips':
-    #     tool = video_tools(paths = valid_files , output_folder = output_folder)
-    #     results = tool.combined_clips()
-
-    # elif tool_name == 'change_video_format':
-    #     tool = video_tools(paths = valid_files,output_folder = output_folder, extension = needed_arg)
-    #     results = tool.change_videoFormat()
-
-    # elif tool_name == 'change_video_resolution':
-    #     tool = video_tools(paths = valid_files,output_folder = output_folder)
-    #     results = tool.change_videoResolution(resolution = needed_arg)
-
-    # # Audio Tools:=
-    # elif tool_name == 'combine_audio':
-    #     tool = audio_tools(paths = valid_files , output_folder = output_folder)
-    #     results = tool.combined_audio()
-
-    # elif tool_name == 'change_audio_format':
-    #     tool = audio_tools(paths = valid_files,output_folder = output_folder, extension = needed_arg)
-    #     results = tool.change_audioFormat()
-
-    # elif tool_name == 'change_audio_volume':
-    #     tool = audio_tools(paths = valid_files,output_folder = output_folder)
-    #     results = tool.change_audioVolume(volume_factor = needed_arg)
     
     else: 
         jsonify({'status': 'failed', 'error': ['Tool does not exits']})
