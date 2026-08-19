@@ -224,7 +224,6 @@ def download_file(file_id):
         file_path_abs,
         as_attachment=True,
         download_name=filename,
-        mimetype='application/octet-stream'  # Add explicit mimetype
     )
     
 # Working but still need some changes.

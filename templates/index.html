@@ -3,26 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UTILITY BOX - Professional File Conversion Tools</title>
+    <title>FileForge - Professional File Conversion Tools</title>
     <!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> -->
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <header>
-        <h1 class="logo">Utilities</h1>
+        <h1 class="logo">FileForge</h1>
         <nav class="tools-link-box">
             <a href="#pdf-space" class="link">PDF Tools</a>
             <a href="#doc-space" class="link">Doc Tools</a>
-            <a href="#video-space" class="link">Video Tools</a>
-            <a href="#audio-space" class="link">Audio Tools</a>
         </nav>
     </header>
 
     <nav class="tools-link-box small-nav">
         <a href="#pdf-space" class="link">PDF Tools</a>
         <a href="#doc-space" class="link">Doc Tools</a>
-        <a href="#video-space" class="link">Video Tools</a>
-        <a href="#audio-space" class="link">Audio Tools</a>
     </nav>
 
     <main>
@@ -296,116 +292,10 @@
             </div>
         </section>
 
-        <!-- Video Tools Section -->
-         <div class="space" id="video-space"></div>
-        <section id="video-tool-section" class="tool-section">
-            <h2 class="section-title">Video Tools</h2>
-            <div class="tools-grid video-tool-inner">
-                <div class="tool-card video-tool">
-                    <div class="tool-icon">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polygon points="23 7 16 12 23 17 23 7"/>
-                            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
-                        </svg>
-                    </div>
-                    <h3 class="tool-heading">Combine Video Clips</h3>
-                    <p class="tool-description">Seamlessly merge multiple video clips into a single continuous file with smooth transitions.</p>
-                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="Combine Video Clips">Open Tool</a>
-                </div>
-
-                <div class="tool-card video-tool">
-                    <div class="tool-icon">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 18V5l12-2v13"/>
-                            <circle cx="6" cy="18" r="3"/>
-                            <circle cx="18" cy="16" r="3"/>
-                        </svg>
-                    </div>
-                    <h3 class="tool-heading">Video to Audio</h3>
-                    <p class="tool-description">Extract high-quality audio tracks from video files in various popular formats.</p>
-                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="Video to Audio">Open Tool</a>
-                </div>
-
-                <div class="tool-card video-tool">
-                    <div class="tool-icon">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
-                            <line x1="7" y1="2" x2="7" y2="22"/>
-                            <line x1="17" y1="2" x2="17" y2="22"/>
-                            <line x1="2" y1="12" x2="22" y2="12"/>
-                            <line x1="2" y1="7" x2="7" y2="7"/>
-                            <line x1="2" y1="17" x2="7" y2="17"/>
-                            <line x1="17" y1="17" x2="22" y2="17"/>
-                            <line x1="17" y1="7" x2="22" y2="7"/>
-                        </svg>
-                    </div>
-                    <h3 class="tool-heading">Change Video Format</h3>
-                    <p class="tool-description">Convert videos between formats for optimal compatibility across devices and platforms.</p>
-                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="Change Video Format">Open Tool</a>
-                </div>
-
-                <div class="tool-card video-tool">
-                    <div class="tool-icon">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="2" y="7" width="20" height="15" rx="2" ry="2"/>
-                            <polyline points="17 2 12 7 7 2"/>
-                        </svg>
-                    </div>
-                    <h3 class="tool-heading">Change Video Resolution</h3>
-                    <p class="tool-description">Adjust video resolution to optimize file size or enhance quality for different uses.</p>
-                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="Change Video Resolution">Open Tool</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Audio Tools Section -->
-        <div class="space" id="audio-space"></div>
-        <section id="audio-tool-section" class="tool-section">
-            <h2 class="section-title">Audio Tools</h2>
-            <div class="tools-grid audio-tool-inner">
-                <div class="tool-card audio-tool">
-                    <div class="tool-icon">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 18V5l12-2v13"/>
-                            <circle cx="6" cy="18" r="3"/>
-                            <circle cx="18" cy="16" r="3"/>
-                        </svg>
-                    </div>
-                    <h3 class="tool-heading">Combine Audio</h3>
-                    <p class="tool-description">Merge multiple audio tracks into a single file for podcasts, music, or presentations.</p>
-                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="Combine Audio">Open Tool</a>
-                </div>
-
-                <div class="tool-card audio-tool">
-                    <div class="tool-icon">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <line x1="12" y1="8" x2="12" y2="12"/>
-                            <line x1="12" y1="16" x2="12.01" y2="16"/>
-                        </svg>
-                    </div>
-                    <h3 class="tool-heading">Change Audio Format</h3>
-                    <p class="tool-description">Convert audio files between formats while maintaining quality for any device or application.</p>
-                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="Change Audio Format">Open Tool</a>
-                </div>
-
-                <div class="tool-card audio-tool">
-                    <div class="tool-icon">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
-                        </svg>
-                    </div>
-                    <h3 class="tool-heading">Change Audio Volume</h3>
-                    <p class="tool-description">Adjust volume levels of audio files for consistent playback across your media library.</p>
-                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="Change Audio Volume">Open Tool</a>
-                </div>
-            </div>
-        </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 Utility Box. All rights reserved.</p>
+        <p>&copy; 2026 FileForge. All rights reserved.</p>
     </footer>
 
     <!-- <script src="{{ url_for('static', filename='script.js') }}"></script> -->
@@ -527,67 +417,7 @@
                 }
             }
         );
-
-        // Video Tools
-        gsap.fromTo('#video-tool-section .section-title',
-            { y: 30, opacity: 0 },
-            {
-                y: 0,
-                opacity: 1,
-                duration: 0.8,
-                scrollTrigger: {
-                    trigger: '#video-tool-section',
-                    start: 'top 80%',
-                    toggleActions: 'play none none reverse'
-                }
-            }
-        );
-
-        gsap.fromTo('#video-tool-section .tool-card',
-            { y: 40, opacity: 0 },
-            {
-                y: 0,
-                opacity: 1,
-                duration: 0.6,
-                stagger: 0.1,
-                scrollTrigger: {
-                    trigger: '#video-tool-section .tools-grid',
-                    start: 'top 80%',
-                    toggleActions: 'play none none reverse'
-                }
-            }
-        );
-
-        // Audio Tools
-        gsap.fromTo('#audio-tool-section .section-title',
-            { y: 30, opacity: 0 },
-            {
-                y: 0,
-                opacity: 1,
-                duration: 0.8,
-                scrollTrigger: {
-                    trigger: '#audio-tool-section',
-                    start: 'top 80%',
-                    toggleActions: 'play none none reverse'
-                }
-            }
-        );
-
-        gsap.fromTo('#audio-tool-section .tool-card',
-            { y: 40, opacity: 0 },
-            {
-                y: 0,
-                opacity: 1,
-                duration: 0.6,
-                stagger: 0.1,
-                scrollTrigger: {
-                    trigger: '#audio-tool-section .tools-grid',
-                    start: 'top 80%',
-                    toggleActions: 'play none none reverse'
-                }
-            }
-        );
-
+        
     </script>
 </body>
 </html>

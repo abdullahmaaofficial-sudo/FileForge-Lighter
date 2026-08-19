@@ -328,49 +328,44 @@ document.getElementById('proceed-btn').onclick = () => {
 };
 
 
-function SendAndProcessFiles(){
+async function SendAndProcessFiles(){
     
-    fetch('/upload', {
-        method: 'POST',
-        body: formData
-    }).then(response => response.json())
-    .then(data => {
-        if (data.status === 'success'){
-            const required_data = {
-                'files_mapping': data.files_mapping, 
-                'needed_arg': GetSelectedRadio()
-            };
-            
-            fetch(`/process/${TOOL_CONFIG[toolToProcess].route}`,{
-                method: 'POST',
-                headers:{
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(required_data)
-            })
-            .then(res => res.json())
-            .then(process_data => {
-                if (process_data.status === 'success'){
-                    console.log(process_data);
-                    
-                    handleDownload(process_data.successful_files)
-                    ProcessedFiles = process_data.successful_files;
+    const response = await fetch('/upload', {method: 'POST',body: formData})
+    const data = await response.json();
+   
+    if (data.status === 'success'){
+        const required_data = {
+            'files_mapping': data.files_mapping, 
+            'needed_arg': GetSelectedRadio()
+        };     
+        ProcessFiles(required_data)         
+    }else {
+        console.error(data.error);
+        ErrorBox.innerHTML = `<p id="error-message">${data.error}</p>`;
+        ProcessNeedsBox.appendChild(ErrorBox);
+    }
+}
 
-                }else{
-                    console.error(process_data.error);
-                    ErrorBox.innerHTML = `<p id="error-message">${process_data.error}</p>`;
-                    ProcessNeedsBox.appendChild(ErrorBox);
-                }   
-            })
-        }
-        else {
-            console.error(data.error);
-            ErrorBox.innerHTML = `<p id="error-message">${data.error}</p>`;
-            ProcessNeedsBox.appendChild(ErrorBox);
-        }
-    })
-};
+async function ProcessFiles(req_data) {
+    const response = await fetch(`/process/${TOOL_CONFIG[toolToProcess].route}`,{
+                    method: 'POST',
+                    headers:{
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(req_data) 
+                })
 
+    const process_data = await response.json();
+
+    if (process_data.status === 'success'){
+            console.log(process_data);      
+            handleDownload(process_data.successful_files)
+            ProcessedFiles = process_data.successful_files;
+    }else{
+        console.error(process_data.error);
+        ErrorBox.innerHTML = `<p id="error-message">${process_data.error}</p>`;
+        ProcessNeedsBox.appendChild(ErrorBox);}   
+}
 
 function handleDownload(data){
     DownloadSection.style.display = 'flex';
@@ -414,48 +409,69 @@ DownloadSection.addEventListener('click', (e) =>{
 
 })
 
-function DownloadTheFiles(data, id) {
-    if (!data?.[id]) {
-        console.error('No file to download!');
-        return;
-    }
-
-    fetch(`/download-file/${id}`, {
-    method: 'GET',
-    credentials: 'same-origin'
-    })
-    .then(async res => {
-        const contentType = res.headers.get('content-type');
-
-        if (!res.ok) {
-            const text = await res.text();
-            throw new Error(text);
+async function DownloadTheFiles(data, id) {
+    try {
+        // Check if the file exists in the data array/object
+        if (!data?.[id]) {
+            throw new Error("No file to download.");
         }
 
-        if (contentType && contentType.includes('application/json')) {
-            const json = await res.json();
-            throw new Error(json.error || 'Download failed');
+        // Request the file from Flask
+        const response = await fetch(`/download-file/${id}`, {
+            method: "GET",
+            credentials: "same-origin"
+        });
+
+        // Debug information
+        console.log("Status:", response.status);
+        console.log("Content-Type:", response.headers.get("content-type"));
+        console.log("Content-Length:", response.headers.get("content-length"));
+
+        // Handle HTTP errors
+        if (!response.ok) {
+            const message = await response.text();
+            throw new Error(message || "Download failed.");
         }
 
-        return res.blob();
-    })
-    .then(blob => {
-        console.log('Blob size:', blob.size); // debug
+        // Handle JSON error responses
+        const contentType = response.headers.get("content-type");
 
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        if (contentType && contentType.includes("application/json")) {
+            const json = await response.json();
+            throw new Error(json.error || "Download failed.");
+        }
 
+        // Convert response to Blob
+        const blob = await response.blob();
+
+        console.log("Blob size:", blob.size);
+
+        if (blob.size === 0) {
+            throw new Error("Received an empty file.");
+        }
+
+        // Create a temporary download URL
+        const url = URL.createObjectURL(blob);
+
+        // Extract filename
+        const filename = data[id].split(/[/\\]/).pop();
+
+        // Create hidden download link
+        const a = document.createElement("a");
         a.href = url;
-        a.download = data[id].split(/[/\\]/).pop();
+        a.download = filename;
+
         document.body.appendChild(a);
         a.click();
 
+        // Cleanup
         a.remove();
-        window.URL.revokeObjectURL(url);
-    })
-    .catch(err => console.error(err.message));
+        URL.revokeObjectURL(url);
 
-};
+    } catch (err) {
+        console.error("Download Error:", err);
+    }
+}
 
 DownloadAllButton.addEventListener('click', () => {
     DownloadAllAsZip(ProcessedFiles);
