@@ -1,0 +1,1029 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+:root {
+    --background-color: #1e1e1e;
+    --secondary-color: #0947e2;
+    --card-color: #2a2a2a;
+    --text-color: #FBF3D1;
+    --text-secondary: #b0b0b0;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --hover-color: #0a3db8;
+    --success-color: #10b981;
+    --danger-color: #ef4444;
+}
+
+body {
+    background: var(--background-color);
+    color: var(--text-color);
+    position: relative;
+    overflow-x: hidden;
+}
+
+body.no-scroll {
+    overflow: hidden;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem;
+    background: rgba(42, 42, 42, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--secondary-color);
+    letter-spacing: 1px;
+}
+
+.tools-link-box {
+    display: flex;
+    gap: 1rem;
+}
+
+.small-nav{
+    display: none;
+    position: sticky;
+    top: 0;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(42, 42, 42, 0.8);
+    backdrop-filter: blur(10px);
+    border-top: none;
+    padding: 0.8rem 0.3rem;
+    z-index: 100; 
+}
+
+.tools-link-box a {
+    font-size: 1rem;
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.tools-link-box a:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+/* Hero Section */
+.hero-section {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 3rem;
+    background: linear-gradient(135deg, rgba(9, 71, 226, 0.1) 0%, rgba(30, 30, 30, 0.9) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(9, 71, 226, 0.2) 0%, transparent 70%);
+    top: -250px;
+    right: -250px;
+    border-radius: 50%;
+}
+
+.hero-content {
+    max-width: 1000px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-title {
+    font-size: 4rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, #ffffff 0%, var(--secondary-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+}
+
+.hero-description {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-bottom: 3rem;
+    padding: 0 3rem;
+    line-height: 1.8;
+}
+
+.hero-features {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+
+.feature-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.feature-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: rgba(9, 71, 226, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.feature-item span {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.hero-cta {
+    display: inline-block;
+    padding: 1rem 3rem;
+    background: var(--secondary-color);
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(9, 71, 226, 0.4);
+}
+
+.hero-cta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(9, 71, 226, 0.6);
+    background: var(--hover-color);
+}
+
+/* Handle Tool Section */
+.handle-tool-section {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.handle-tool-inner-box {
+    background: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.handle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+#handle-tool-name {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.close-btn {
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+}
+
+.close-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--danger-color);
+}
+
+/* Upload Area */
+.upload-area {
+    margin-bottom: 2rem;
+}
+
+.upload-box {
+    margin-bottom: 1.5rem;
+}
+
+.drag-drop-area {
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    padding: 3rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(9, 71, 226, 0.05);
+}
+
+.drag-drop-area:hover {
+    border-color: var(--secondary-color);
+    background: rgba(9, 71, 226, 0.1);
+}
+
+.drag-drop-area.highlight {
+    border-color: var(--secondary-color);
+    background: rgba(9, 71, 226, 0.15);
+    transform: scale(1.02);
+}
+
+.upload-icon {
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+}
+
+.upload-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.upload-subtext {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Selected Files */
+.selected-files-container {
+    margin-bottom: 2rem;
+}
+
+.files-heading {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    color: var(--text-color);
+}
+
+.selected-files-box {
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.selected-files-box::-webkit-scrollbar {
+    width: 8px;
+}
+
+.selected-files-box::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.selected-files-box::-webkit-scrollbar-thumb {
+    background: var(--secondary-color);
+    border-radius: 4px;
+}
+
+.no-files-text {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 2rem;
+}
+
+.file-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem;
+    border-bottom: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.file-box:last-child {
+    border-bottom: none;
+}
+
+.file-box:hover {
+    background: rgba(9, 71, 226, 0.1);
+}
+
+.file-name {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-color);
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.size-btn-box {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.file-size {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.del-btn {
+    font-size: 1.5rem;
+    font-weight: 700;
+    transform: rotate(45deg);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text-secondary);
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.del-btn:hover {
+    color: var(--danger-color);
+    transform: rotate(45deg) scale(1.2);
+}
+
+/* Process Area */
+.process-area {
+    padding: 1.5rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.process-needs-box {
+    margin-bottom: 1.5rem;
+}
+
+.process-needs-box p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+#selection-heading {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+
+/* Hide default radio buttons */
+.options-box input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Style the label to act as the radio button container */
+.options-box label {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1.2rem;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    color: var(--text-color);
+    user-select: none;
+}
+
+/* Add custom radio circle before the label text */
+.options-box label::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    margin-right: 0.8rem;
+    transition: all 0.3s ease;
+    background: rgba(0, 0, 0, 0.4);
+    flex-shrink: 0;
+}
+
+/* Add inner dot for checked state */
+.options-box label::after {
+    content: '';
+    position: absolute;
+    left: 1.45rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--secondary-color);
+    transform: scale(0);
+    transition: transform 0.2s ease;
+}
+
+/* Hover effect */
+.options-box label:hover {
+    background: rgba(9, 71, 226, 0.1);
+    border-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+/* Checked state */
+.options-box input[type="radio"]:checked + label {
+    background: rgba(9, 71, 226, 0.2);
+    border-color: var(--secondary-color);
+    box-shadow: 0 4px 12px rgba(9, 71, 226, 0.3);
+}
+
+.options-box input[type="radio"]:checked + label::before {
+    border-color: var(--secondary-color);
+    background: rgba(9, 71, 226, 0.3);
+}
+
+.options-box input[type="radio"]:checked + label::after {
+    transform: scale(1);
+}
+
+/* Focus state for accessibility */
+.options-box input[type="radio"]:focus + label {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 2px;
+}
+
+/* Adjust options-box layout */
+.options-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    justify-content: flex-start;
+}
+
+#proceed-btn {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    background: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(9, 71, 226, 0.3);
+}
+
+#proceed-btn:hover {
+    background: var(--hover-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(9, 71, 226, 0.5);
+}
+
+.error-box {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid var(--danger-color);
+    border-radius: 6px;
+}
+
+#error-message {
+    color: var(--danger-color);
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* Download Section */
+.download-section {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.download-inner {
+    background: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 700px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.download-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+.download-header h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.go-back-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-color);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.go-back-btn:hover {
+    background: var(--secondary-color);
+    transform: translateX(-3px);
+}
+
+.download-files {
+    margin-bottom: 2rem;
+}
+
+.display-filename-box {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.filename {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.filename:hover {
+    background: rgba(9, 71, 226, 0.1);
+    border-color: var(--secondary-color);
+}
+
+.filename span {
+    color: var(--text-color);
+    font-weight: 500;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.download-button {
+    padding: 0.5rem 1.5rem;
+    background: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.download-button:hover {
+    background: var(--hover-color);
+    transform: translateY(-2px);
+}
+
+.download-all-btn {
+    width: 100%;
+    padding: 1rem;
+    background: var(--success-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.download-all-btn:hover {
+    background: #059669;
+    transform: translateY(-2px);
+}
+
+/* Tool Sections */
+.tool-section {
+    padding: 4rem 3rem;
+}
+.space{
+    height: 4vh;
+}
+#pdf-space{
+    border-top: 5px solid #0947e2;
+    border-radius: 20%;
+}
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--secondary-color);
+    margin-bottom: 2rem;
+    letter-spacing: 1px;
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.tool-card {
+    background: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    min-height: 280px;
+}
+
+.tool-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--secondary-color);
+    box-shadow: 0 8px 25px rgba(9, 71, 226, 0.3);
+}
+
+.tool-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    background: rgba(9, 71, 226, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--secondary-color);
+    margin-bottom: 1.5rem;
+}
+
+.tool-heading {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.tool-description {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+}
+
+.open-tool-btn {
+    display: inline-block;
+    padding: 0.7rem 1.5rem;
+    background: var(--secondary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.open-tool-btn:hover {
+    background: var(--hover-color);
+    transform: translateX(5px);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 2rem;
+    background: var(--card-color);
+    border-top: 1px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    body {
+        padding: 0;
+    }
+    
+    header {
+        padding: 1.5rem 2rem;
+    }
+    
+    .hero-section {
+        padding: 3rem 2rem;
+    }
+    
+    .tool-section {
+        padding: 3rem 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        justify-content: center;
+        padding: 1rem;
+        position: relative;
+        border-bottom: none;
+    }
+    
+    .logo {
+        font-size: 2rem;
+    }
+    
+    .tools-link-box {
+        display: none;
+        gap: 0;
+    }
+    
+    .small-nav{
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .tools-link-box a {
+        font-size: 0.9rem;
+        padding: 0.4rem 0.8rem;
+    }
+    
+    .hero-section {
+        min-height: 60vh;
+        padding: 2rem 1rem;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-description {
+        font-size: 1rem;
+        padding: 0 0.6rem;
+    }
+    
+    .hero-features {
+        gap: 1.5rem;
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+    }
+    
+    .tools-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .tool-section {
+        padding: 2rem 2rem;
+    }
+    
+    .handle-tool-section {
+        padding: 1rem;
+    }
+    
+    .handle-tool-inner-box {
+        padding: 1.5rem;
+        max-height: 95vh;
+    }
+    
+    #handle-tool-name {
+        font-size: 1.3rem;
+    }
+    
+    .drag-drop-area {
+        padding: 2rem 1rem;
+    }
+    
+    .selected-files-box {
+        max-height: 200px;
+    }
+    
+    .download-inner {
+        padding: 1.5rem;
+    }
+    
+    .download-header {
+        gap: 1rem;
+    }
+    
+    .download-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .filename{
+        gap: 10px;
+    }
+     .options-box label {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .options-box label::before {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .options-box label::after {
+        left: 1.35rem;
+        width: 8px;
+        height: 8px;
+    }
+    
+}
+
+@media (max-width: 480px) {
+    header{
+        position: relative;
+        border: none;
+        padding: 0.5rem;
+    }
+    .logo{
+        font-size: 2rem;
+    }
+    .tools-link-box{
+        display: none;
+        gap: 0;
+    }
+    .small-nav{
+        display: flex;
+        justify-content: space-evenly;
+        z-index: 10;
+    }
+    .tools-link-box > a{
+        font-size: 0.8rem;
+        padding: 0.5rem 0.6rem;
+        border-radius: 5px;
+    }
+
+    .feature-item > span{
+        font-size: 0.85rem;
+    }
+    .hero-title {
+        font-size: 2rem;
+    }
+    .hero-description {
+        font-size: 0.8rem;
+        padding: 0 0.5rem;
+    }
+    
+    .hero-cta {
+        padding: 0.8rem 2rem;
+        font-size: 1rem;
+    }
+
+    .handle-header{
+        padding-bottom: 0.65rem;
+    }
+    #handle-tool-name{
+        font-size: 1.15rem;
+    }
+    .close-btn > svg{
+        height: 20px;
+        width: 20px;
+    }
+    .upload-icon > svg{
+        height: 58px;
+        width: 58px;
+    }
+    .upload-text{
+        font-size: 0.9rem;
+    }
+    .selected-files-box{
+        padding: 0.7rem 0.6rem;
+    }
+    .file-box{
+        padding: 0.8rem 0.5rem;
+    }
+    .file-name {
+        font-size: 0.8rem;
+    }
+    .size-btn-box{
+        gap: 5px;
+    }
+    .file-size {
+        font-size: 0.7rem;
+    }
+    .del-btn{
+        padding-bottom: 0.5rem;
+    }
+    .options-box {
+        gap: 0.6rem;
+    }
+    
+    .options-box label {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.85rem;
+    }
+    
+    .options-box label::before {
+        width: 16px;
+        height: 16px;
+        margin-right: 0.6rem;
+    }
+    
+    .options-box label::after {
+        left: 1.2rem;
+        width: 7px;
+        height: 7px;
+    }
+
+
+    .download-section{
+        padding: 0 0.95rem;
+    }
+    .download-header{
+        padding-bottom: 0.8rem;
+    }
+    .download-header > h2{
+        font-size: 1.1rem;
+    }
+    .go-back-btn{
+        font-size: 0.8rem;
+        padding: 0.5rem 0.8rem;
+        border-radius: 5px;
+    }
+    .go-back-btn > svg{
+        height: 16px;
+        width: 16px;
+    }
+    .filename{
+        padding: 0.6rem 0.7rem;
+        gap: 6px;
+    }
+    .filename > span{
+        font-size: 0.8rem;
+    }
+    .download-button{
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+        border-radius: 4px;
+    }
+
+    .tool-card {
+        min-height: 240px;
+        padding: 1.5rem;
+    }
+    .tool-heading {
+        font-size: 1.2rem;
+    }
+    
+    .tool-description {
+        font-size: 0.85rem;
+    }
+}

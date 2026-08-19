@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UTILITY BOX - Professional File Conversion Tools</title>
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1 class="logo">Utilities</h1>
+        <nav class="tools-link-box">
+            <a href="#pdf-space" class="link">PDF Tools</a>
+            <a href="#doc-space" class="link">Doc Tools</a>
+            <a href="#video-space" class="link">Video Tools</a>
+            <a href="#audio-space" class="link">Audio Tools</a>
+        </nav>
+    </header>
+
+    <nav class="tools-link-box small-nav">
+        <a href="#pdf-space" class="link">PDF Tools</a>
+        <a href="#doc-space" class="link">Doc Tools</a>
+        <a href="#video-space" class="link">Video Tools</a>
+        <a href="#audio-space" class="link">Audio Tools</a>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">Transform Your Files with Ease</h1>
+                <p class="hero-description">
+                    Professional-grade file conversion and manipulation tools at your fingertips. 
+                    Convert, combine, and optimize your documents, videos, and audio files instantly. 
+                    All processing happens securely with enterprise-level quality.
+                </p>
+                <div class="hero-features">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                            </svg>
+                        </div>
+                        <span>Lightning Fast</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                        </div>
+                        <span>Secure Processing</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                                <polyline points="7.5 4.21 12 6.81 16.5 4.21"/>
+                                <polyline points="7.5 19.79 7.5 14.6 3 12"/>
+                                <polyline points="21 12 16.5 14.6 16.5 19.79"/>
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                                <line x1="12" y1="22.08" x2="12" y2="12"/>
+                            </svg>
+                        </div>
+                        <span>Batch Processing</span>
+                    </div>
+                </div>
+                <a href="#pdf-space" class="hero-cta">Get Started</a>
+            </div>
+        </section>
+
+        <!-- Handle Tool Section -->
+        <section class="handle-tool-section" id="handle-tool-section">
+            <div class="handle-tool-inner-box">
+                <div class="handle-header">
+                    <h1 id="handle-tool-name">Tool Name</h1>
+                    <span id="close-btn" class="close-btn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </span>
+                </div>
+
+                <div class="upload-area">
+                    <div class="upload-box">
+                        <div class="drag-drop-area" id="drag-drop-area">
+                            <div class="upload-icon">
+                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="17 8 12 3 7 8"/>
+                                    <line x1="12" y1="3" x2="12" y2="15"/>
+                                </svg>
+                            </div>
+                            <p class="upload-text">Drag and drop your files here</p>
+                            <p class="upload-subtext">or click to browse</p>
+                        </div>
+                        <input type="file" id="input-tag" name="user-input" multiple hidden>
+                    </div>
+
+                    <div class="selected-files-container">
+                        <h3 class="files-heading">Selected Files</h3>
+                        <div class="selected-files-box" id="selected-files-box">
+                            <p class="no-files-text">No files selected</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="process-area">
+                    <div class="process-needs-box" id="process-needs-box">
+                        <p>Select your files to continue</p>
+                    </div>
+                    <button id="proceed-btn">Process Files</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Download Section -->
+        <section class="download-section" id="download-section">
+            <div class="download-inner">
+                <div class="download-header">
+                    <h2>Your Files Are Ready</h2>
+                    <button id="go-back-btn" class="go-back-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="19" y1="12" x2="5" y2="12"/>
+                            <polyline points="12 19 5 12 12 5"/>
+                        </svg>
+                        Go Back
+                    </button>
+                </div>
+                <div class="download-files">
+                    <div class="display-filename-box" id="filename-box"></div>
+                </div>
+                <button id="download-all-btn" class="download-all-btn">Download All as ZIP</button>
+            </div>
+        </section>
+
+        <!-- PDF Tools Section -->
+        <div id="pdf-space" class="space"></div>
+        <section id="pdf-tool-section" class="tool-section">
+            <h2 class="section-title">PDF Tools</h2>
+            <div class="tools-grid pdf-tool-inner">
+                <div class="tool-card pdf-tool">
+                    <div class="tool-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="12" y1="18" x2="12" y2="12"/>
+                            <line x1="9" y1="15" x2="15" y2="15"/>
+                        </svg>
+                    </div>
+                    <h3 class="tool-heading">Combine PDFs</h3>
+                    <p class="tool-description">Merge multiple PDF documents into a single file while maintaining quality and formatting.</p>
+                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="Combine PDFs">Open Tool</a>
+                </div>
+
+                <div class="tool-card pdf-tool">
+                    <div class="tool-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                            <polyline points="21 15 16 10 5 21"/>
+                        </svg>
+                    </div>
+                    <h3 class="tool-heading">PDF to Images</h3>
+                    <p class="tool-description">Extract high-quality images from PDF pages for web use, presentations, or archiving.</p>
+                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="Pdf to Images">Open Tool</a>
+                </div>
+
+                <div class="tool-card pdf-tool">
+                    <div class="tool-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <rect x="8" y="12" width="8" height="6"/>
+                        </svg>
+                    </div>
+                    <h3 class="tool-heading">Images to PDF</h3>
+                    <p class="tool-description">Convert multiple images into a professional PDF document with customizable layout options.</p>
+                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="Images to PDF">Open Tool</a>
+                </div>
+
+                <div class="tool-card pdf-tool">
+                    <div class="tool-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <polyline points="10 9 9 9 8 9"/>
+                        </svg>
+                    </div>
+                    <h3 class="tool-heading">PDF to DOCX</h3>
+                    <p class="tool-description">Transform PDF files into editable Word documents while preserving formatting and structure.</p>
+                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="Pdf to Docx">Open Tool</a>
+                </div>
+
+                <div class="tool-card pdf-tool">
+                    <div class="tool-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="4 17 10 11 4 5"/>
+                            <line x1="12" y1="19" x2="20" y2="19"/>
+                        </svg>
+                    </div>
+                    <h3 class="tool-heading">PDF to Text</h3>
+                    <p class="tool-description">Extract plain text content from PDF documents for easy editing and data processing.</p>
+                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="Pdf to Text">Open Tool</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Document Tools Section -->
+        <div class="space" id="doc-space"></div>
+        <section id="doc-tool-section" class="tool-section">
+            <h2 class="section-title">Document Tools</h2>
+            <div class="tools-grid doc-tool-inner">
+                <div class="tool-card doc-tool">
+                    <div class="tool-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                    </div>
+                    <h3 class="tool-heading">DOCX to PDF</h3>
+                    <p class="tool-description">Convert Word documents to universally accessible PDF format with preserved formatting.</p>
+                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="Docx to PDF">Open Tool</a>
+                </div>
+
+                <div class="tool-card doc-tool">
+                    <div class="tool-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <path d="M10 12h4M10 16h4"/>
+                        </svg>
+                    </div>
+                    <h3 class="tool-heading">Text to PDF</h3>
+                    <p class="tool-description">Generate professional PDF documents from plain text files with customizable styling.</p>
+                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="Text to PDF">Open Tool</a>
+                </div>
+
+                <div class="tool-card doc-tool">
+                    <div class="tool-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="16 18 22 12 16 6"/>
+                            <polyline points="8 6 2 12 8 18"/>
+                        </svg>
+                    </div>
+                    <h3 class="tool-heading">Markdown to HTML</h3>
+                    <p class="tool-description">Convert Markdown files to clean HTML for web publishing and content management.</p>
+                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="Markdown to HTML">Open Tool</a>
+                </div>
+
+                <div class="tool-card doc-tool">
+                    <div class="tool-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                        </svg>
+                    </div>
+                    <h3 class="tool-heading">JSON to CSV</h3>
+                    <p class="tool-description">Transform JSON data into CSV format for spreadsheet applications and data analysis.</p>
+                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="JSON to CSV">Open Tool</a>
+                </div>
+
+                <div class="tool-card doc-tool">
+                    <div class="tool-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                            <path d="M9 14h6M9 18h6"/>
+                        </svg>
+                    </div>
+                    <h3 class="tool-heading">CSV to JSON</h3>
+                    <p class="tool-description">Convert CSV spreadsheets into structured JSON format for API integration and web development.</p>
+                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="CSV to JSON">Open Tool</a>
+                </div>
+
+                <div class="tool-card doc-tool">
+                    <div class="tool-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                            <line x1="10" y1="12" x2="14" y2="12"/>
+                            <line x1="10" y1="16" x2="14" y2="16"/>
+                        </svg>
+                    </div>
+                    <h3 class="tool-heading">CSV to JSONL</h3>
+                    <p class="tool-description">Convert CSV files to JSON Lines format ideal for streaming data and machine learning.</p>
+                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="CSV to JSONL">Open Tool</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Video Tools Section -->
+         <div class="space" id="video-space"></div>
+        <section id="video-tool-section" class="tool-section">
+            <h2 class="section-title">Video Tools</h2>
+            <div class="tools-grid video-tool-inner">
+                <div class="tool-card video-tool">
+                    <div class="tool-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="23 7 16 12 23 17 23 7"/>
+                            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                        </svg>
+                    </div>
+                    <h3 class="tool-heading">Combine Video Clips</h3>
+                    <p class="tool-description">Seamlessly merge multiple video clips into a single continuous file with smooth transitions.</p>
+                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="Combine Video Clips">Open Tool</a>
+                </div>
+
+                <div class="tool-card video-tool">
+                    <div class="tool-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18V5l12-2v13"/>
+                            <circle cx="6" cy="18" r="3"/>
+                            <circle cx="18" cy="16" r="3"/>
+                        </svg>
+                    </div>
+                    <h3 class="tool-heading">Video to Audio</h3>
+                    <p class="tool-description">Extract high-quality audio tracks from video files in various popular formats.</p>
+                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="Video to Audio">Open Tool</a>
+                </div>
+
+                <div class="tool-card video-tool">
+                    <div class="tool-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
+                            <line x1="7" y1="2" x2="7" y2="22"/>
+                            <line x1="17" y1="2" x2="17" y2="22"/>
+                            <line x1="2" y1="12" x2="22" y2="12"/>
+                            <line x1="2" y1="7" x2="7" y2="7"/>
+                            <line x1="2" y1="17" x2="7" y2="17"/>
+                            <line x1="17" y1="17" x2="22" y2="17"/>
+                            <line x1="17" y1="7" x2="22" y2="7"/>
+                        </svg>
+                    </div>
+                    <h3 class="tool-heading">Change Video Format</h3>
+                    <p class="tool-description">Convert videos between formats for optimal compatibility across devices and platforms.</p>
+                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="Change Video Format">Open Tool</a>
+                </div>
+
+                <div class="tool-card video-tool">
+                    <div class="tool-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="7" width="20" height="15" rx="2" ry="2"/>
+                            <polyline points="17 2 12 7 7 2"/>
+                        </svg>
+                    </div>
+                    <h3 class="tool-heading">Change Video Resolution</h3>
+                    <p class="tool-description">Adjust video resolution to optimize file size or enhance quality for different uses.</p>
+                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="Change Video Resolution">Open Tool</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Audio Tools Section -->
+        <div class="space" id="audio-space"></div>
+        <section id="audio-tool-section" class="tool-section">
+            <h2 class="section-title">Audio Tools</h2>
+            <div class="tools-grid audio-tool-inner">
+                <div class="tool-card audio-tool">
+                    <div class="tool-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18V5l12-2v13"/>
+                            <circle cx="6" cy="18" r="3"/>
+                            <circle cx="18" cy="16" r="3"/>
+                        </svg>
+                    </div>
+                    <h3 class="tool-heading">Combine Audio</h3>
+                    <p class="tool-description">Merge multiple audio tracks into a single file for podcasts, music, or presentations.</p>
+                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="Combine Audio">Open Tool</a>
+                </div>
+
+                <div class="tool-card audio-tool">
+                    <div class="tool-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                    </div>
+                    <h3 class="tool-heading">Change Audio Format</h3>
+                    <p class="tool-description">Convert audio files between formats while maintaining quality for any device or application.</p>
+                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="Change Audio Format">Open Tool</a>
+                </div>
+
+                <div class="tool-card audio-tool">
+                    <div class="tool-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                        </svg>
+                    </div>
+                    <h3 class="tool-heading">Change Audio Volume</h3>
+                    <p class="tool-description">Adjust volume levels of audio files for consistent playback across your media library.</p>
+                    <a href="#handle-tool-section" class="open-tool-btn" data-toolname="Change Audio Volume">Open Tool</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Utility Box. All rights reserved.</p>
+    </footer>
+
+    <!-- <script src="{{ url_for('static', filename='script.js') }}"></script> -->
+     <script src="/static/script.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+    <script>
+       gsap.registerPlugin(ScrollTrigger);
+
+        const header_tl = gsap.timeline();
+
+        header_tl
+            .fromTo('.logo',
+                { y: -20, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.8 }
+            )
+            .fromTo('.link',
+                { y: -20, opacity: 0 },
+                { 
+                    y: 0, 
+                    opacity: 1, 
+                    stagger: 0.1, 
+                    duration: 0.6,
+                    clearProps: 'transform'
+                },
+                '-=0.6'
+            );
+
+        const hero_tl = gsap.timeline();
+
+        hero_tl
+            .fromTo('.hero-title',
+                { y: 30, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.8 }
+            )
+            .fromTo('.hero-description',
+                { y: 20, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.6 },
+                '-=0.4'
+            )
+            .fromTo('.feature-item',
+                { y: 20, opacity: 0 },
+                { 
+                    y: 0,
+                    opacity: 1,
+                    stagger: 0.1,
+                    duration: 0.6
+                },
+                '-=0.3'
+            )
+            .fromTo('.hero-cta',
+                { x: -20, opacity: 0 },
+                { 
+                    x: 0,
+                    opacity: 1,
+                    duration: 0.6,
+                    clearProps: 'transform'
+                },
+                '-=0.2'
+            );
+
+        // PDF Tools
+        gsap.fromTo('#pdf-tool-section .section-title',
+            { y: 30, opacity: 0 },
+            {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                scrollTrigger: {
+                    trigger: '#pdf-tool-section',
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                }
+            }
+        );
+
+        gsap.fromTo('#pdf-tool-section .tool-card',
+            { y: 40, opacity: 0 },
+            {
+                y: 0,
+                opacity: 1,
+                duration: 0.6,
+                stagger: 0.1,
+                scrollTrigger: {
+                    trigger: '#pdf-tool-section .tools-grid',
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                }
+            }
+        );
+
+        // Document Tools
+        gsap.fromTo('#doc-tool-section .section-title',
+            { y: 30, opacity: 0 },
+            {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                scrollTrigger: {
+                    trigger: '#doc-tool-section',
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                }
+            }
+        );
+
+        gsap.fromTo('#doc-tool-section .tool-card',
+            { y: 40, opacity: 0 },
+            {
+                y: 0,
+                opacity: 1,
+                duration: 0.6,
+                stagger: 0.1,
+                scrollTrigger: {
+                    trigger: '#doc-tool-section .tools-grid',
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                }
+            }
+        );
+
+        // Video Tools
+        gsap.fromTo('#video-tool-section .section-title',
+            { y: 30, opacity: 0 },
+            {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                scrollTrigger: {
+                    trigger: '#video-tool-section',
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                }
+            }
+        );
+
+        gsap.fromTo('#video-tool-section .tool-card',
+            { y: 40, opacity: 0 },
+            {
+                y: 0,
+                opacity: 1,
+                duration: 0.6,
+                stagger: 0.1,
+                scrollTrigger: {
+                    trigger: '#video-tool-section .tools-grid',
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                }
+            }
+        );
+
+        // Audio Tools
+        gsap.fromTo('#audio-tool-section .section-title',
+            { y: 30, opacity: 0 },
+            {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                scrollTrigger: {
+                    trigger: '#audio-tool-section',
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                }
+            }
+        );
+
+        gsap.fromTo('#audio-tool-section .tool-card',
+            { y: 40, opacity: 0 },
+            {
+                y: 0,
+                opacity: 1,
+                duration: 0.6,
+                stagger: 0.1,
+                scrollTrigger: {
+                    trigger: '#audio-tool-section .tools-grid',
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                }
+            }
+        );
+
+    </script>
+</body>
+</html>
