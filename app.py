@@ -4,7 +4,9 @@ from werkzeug.utils import secure_filename
 from io import BytesIO
 import zipfile
 import secrets
+import time
 import shutil
+import random
 import uuid
 import os
 
@@ -38,7 +40,21 @@ def allowed_file(filename, file_type=None):
     
     return ext in all_extensions
 
+def Cleanp_old_Folders():
+    Delete_after = 60 * 30
+
+    for folder in os.listdir(UPLOAD_FOLDER):
+        folder_path = os.path.join(UPLOAD_FOLDER,folder)
+        try:
+            if time.time() - os.path.getmtime(folder_path) >  Delete_after:
+                shutil.rmtree(folder_path)
+                print(f"Deleted: {folder_path}")
+        except Exception as e:
+            print(f"Cleanup error: {e}")
+
+
 def get_user_folders():
+    Cleanp_old_Folders()
 
     if 'user-id' not in session:
         session['user-id'] = secrets.token_hex(16)
@@ -60,12 +76,14 @@ def get_user_folders():
         'output-folder' : output_folder
     }
 
+
 @app.route('/')
 def index_file():
     return render_template('index.html')
 
 @app.route('/upload', methods = ['POST'])
-def upload_files():
+@app.route('/upload/<exception>', methods = ['POST'])
+def upload_files(exception = None):
     uploaded_files = {}
     rejected_files = []
 
@@ -88,8 +106,12 @@ def upload_files():
         unique_filename = f"{uuid.uuid4().hex}{extension}"
     
         folders = get_user_folders()
-        file_path = os.path.join(folders['input-folder'],unique_filename)
-
+        if exception == 'e':
+            images_folder = os.path.join(folders['input-folder'], f"images-folder-{random.randint(1000,5000)}")
+            os.makedirs(images_folder, exist_ok=True)
+            file_path = os.path.join(images_folder,unique_filename)
+        else: file_path = os.path.join(folders['input-folder'],unique_filename) 
+        
         file.save(file_path)
         uploaded_files.update({unique_filename:original_filename})
 
@@ -108,7 +130,6 @@ def upload_files():
 
 @app.route('/process/<tool_name>',methods = ["POST"])
 def process_files(tool_name):
-    notExists_files = []
     valid_files = {}
 
     ToProcessDic = request.get_json(silent=True)
@@ -124,18 +145,7 @@ def process_files(tool_name):
 
     for unique_filename ,original_filename in files.items():
         path_Inserver = os.path.join(session['input-folder'],unique_filename)
-
-        if not os.path.exists(path_Inserver):
-            notExists_files.append(original_filename)
-            continue
-
         valid_files.update({path_Inserver:original_filename})
-        
-    if not valid_files: return jsonify({
-        'status':'failed',
-        'error': ['No file exists in server,Try to upload files again!'],
-        'files': notExists_files
-        })
     
     output_folder = session['output-folder']
 
@@ -296,6 +306,7 @@ def download_all_files():
         as_attachment=True,
         download_name='processed_files.zip'
     )
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
