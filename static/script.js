@@ -57,11 +57,11 @@ const TOOL_CONFIG = {
         route:"pdf_to_images",
         optionType: null,
     },
-    "PDF to Docx": {
+    "Pdf to Docx": {
         route:"pdf_to_docx",
         optionType: null,
     },
-    "PDF to Text": {
+    "Pdf to Text": {
         route:"pdf_to_text",
         optionType: null,
     },
@@ -338,6 +338,7 @@ async function SendAndProcessFiles(){
             'files_mapping': data.files_mapping, 
             'needed_arg': GetSelectedRadio()
         };     
+        console.log(required_data)
         ProcessFiles(required_data)         
     }else {
         console.error(data.error);
@@ -347,13 +348,14 @@ async function SendAndProcessFiles(){
 }
 
 async function ProcessFiles(req_data) {
+    console.log('down',req_data)
     const response = await fetch(`/process/${TOOL_CONFIG[toolToProcess].route}`,{
-                    method: 'POST',
-                    headers:{
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(req_data) 
-                })
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(req_data) 
+        })
 
     const process_data = await response.json();
 
@@ -401,107 +403,56 @@ DownloadSection.addEventListener('click', (e) =>{
         const id = ClickedBtn.dataset.id;
 
         if (toolToProcess === "Pdf to Images"){
-            DownloadAllAsZip(ProcessedFiles);
+            CheckFilesForZipDownload();
         }else{
-            DownloadTheFiles(ProcessedFiles,id);
+            CheckFileForDownload(id);
         }
     };
 
 })
 
-async function DownloadTheFiles(data, id) {
-    try {
-        // Check if the file exists in the data array/object
-        if (!data?.[id]) {
-            throw new Error("No file to download.");
-        }
-
-        // Request the file from Flask
-        const response = await fetch(`/download-file/${id}`, {
-            method: "GET",
-            credentials: "same-origin"
-        });
-
-        // Debug information
-        console.log("Status:", response.status);
-        console.log("Content-Type:", response.headers.get("content-type"));
-        console.log("Content-Length:", response.headers.get("content-length"));
-
-        // Handle HTTP errors
-        if (!response.ok) {
-            const message = await response.text();
-            throw new Error(message || "Download failed.");
-        }
-
-        // Handle JSON error responses
-        const contentType = response.headers.get("content-type");
-
-        if (contentType && contentType.includes("application/json")) {
-            const json = await response.json();
-            throw new Error(json.error || "Download failed.");
-        }
-
-        // Convert response to Blob
-        const blob = await response.blob();
-
-        console.log("Blob size:", blob.size);
-
-        if (blob.size === 0) {
-            throw new Error("Received an empty file.");
-        }
-
-        // Create a temporary download URL
-        const url = URL.createObjectURL(blob);
-
-        // Extract filename
-        const filename = data[id].split(/[/\\]/).pop();
-
-        // Create hidden download link
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = filename;
-
-        document.body.appendChild(a);
-        a.click();
-
-        // Cleanup
-        a.remove();
-        URL.revokeObjectURL(url);
-
-    } catch (err) {
-        console.error("Download Error:", err);
-    }
-}
-
 DownloadAllButton.addEventListener('click', () => {
-    DownloadAllAsZip(ProcessedFiles);
+    CheckFilesForZipDownload();
 });
 
-function DownloadAllAsZip(data) {
-    if (!data) {
-        console.error('No files to download!');
-        return;
-    }
+async function CheckFileForDownload(id) {
+    try{
+        const response = await fetch(`/check/file/${id}`);
+        const result = await response.json();
 
-    fetch('/download-all',{
-        method: 'GET',
-        credentials: 'same-origin'
-    })
-    .then(res => {
-        if (!res.ok) throw new Error('Download failed');
-        return res.blob();
-    })
-    .then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        if (response.ok){  
+            if (result.status) DownloadTheFile();
+            else console.log(result.error)
 
-        a.href = url;
-        a.download = 'processed_files.zip';
-        document.body.appendChild(a);
-        a.click();
+        }else console.log('Failed to ready a file for download.')
+    }catch(e){console.error(e)}
+}
 
-        a.remove();
-        window.URL.revokeObjectURL(url);
-    })
-    .catch(err => console.error(err));
+function DownloadTheFile() {
+    try {
+        const anchor_tag = document.createElement('a');
+        anchor_tag.href = '/download/file';
+        anchor_tag.click()
+    } catch(e){console.error(e)}
+}
+
+async function CheckFilesForZipDownload() {
+    try{
+        const response = await fetch(`/check/files/forZip`);
+        const result = await response.json();
+
+        if (response.ok){  
+            if (result.status) DownloadFilesAsZip();
+            else console.log(result.error)
+
+        }else console.log('Failed to ready the files for download.')
+    }catch(e){console.error(e)}
+}
+
+function DownloadFilesAsZip() {
+    try {
+        const anchor_tag = document.createElement('a');
+        anchor_tag.href = '/download/all/files';
+        anchor_tag.click()
+    } catch(e){console.error(e)}
 }

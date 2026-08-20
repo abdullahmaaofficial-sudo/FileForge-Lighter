@@ -8,42 +8,14 @@ import pandas as pd
 import subprocess
 import markdown
 import chardet
+import pymupdf
+import random
 import json
-import fitz
 import uuid
 import os
 
 
-# import platform
-# def get_poppler_path():
-#     """
-#     Intelligently detect Poppler path for cross-platform compatibility.
-#     Priority: Environment variable > System detection > None (system PATH)
-#     """
-#     # 1. Check environment variable (best for deployment)
-#     env_path = os.environ.get('POPPLER_PATH')
-#     if env_path and os.path.exists(env_path):
-#         return env_path
-    
-#     # 2. Platform-specific detection
-#     if platform.system() == 'Windows':
-#         # Common Windows installation paths
-#         possible_paths = [
-#             r'C:\poppler\Library\bin',
-#             r'C:\Program Files\poppler\bin',
-#             r'C:\poppler-utils\bin',
-#         ]
-#         for path in possible_paths:
-#             if os.path.exists(path):
-#                 return path
-    
-#     # 3. For Linux/Mac, assume poppler is in system PATH
-#     return None
 
-# POPPLER_PATH = get_poppler_path()
-
-
-POPPLER_PATH = r'C:\poppler\Library\bin' # When i am deploying the website i will chnage this.
 
 def get_user_friendly_error(exception):
     """Convert technical exceptions to user-friendly messages"""
@@ -85,8 +57,8 @@ class pdf_tools:
         failed_files = []
         error = []
 
-        pdf_num = uuid.uuid4().hex
-        output_path = os.path.join(self.temp_folder, f"merged_pdf_{pdf_num}.pdf")
+        pdf_num = random.randint(101,500)
+        output_path = os.path.join(self.temp_folder, f"Combined_pdf_{pdf_num}.pdf")
 
         if len(self.multiple_paths) >= 2:
             merger = PdfMerger()
@@ -223,62 +195,76 @@ class pdf_tools:
             print(f"Path doesn't exists: {self.multiple_paths[0]}")
             return None
 
-    def pdf_to_images(self ,dpi=200):
-        output_imgsFolder  = {}
+
+
+    def pdf_to_images(self, dpi=200):
+        output_imgsFolder = []
         failed_files = []
         error = []
 
-        for full_path , original_filename in self.multiple_paths.items():
+        zoom = dpi / 72  # 72 is the default PDF DPI
+        matrix = pymupdf.Matrix(zoom, zoom)
+
+        for full_path, original_filename in self.multiple_paths.items():
             if not os.path.exists(full_path):
-                print(f"Path doesn't exists: {full_path}")
+                print(f"Path doesn't exist: {full_path}")
                 error.append(f"File path does not exist: {original_filename}")
                 continue
 
             try:
-                pages = convert_from_path(full_path , dpi = dpi , poppler_path= POPPLER_PATH)
+                pdf = pymupdf.open(full_path)
 
                 base = os.path.splitext(os.path.basename(original_filename))[0]
-                final_folder = os.path.join(self.temp_folder , base)
-                os.makedirs(final_folder , exist_ok=True)
+                final_folder = os.path.join(self.temp_folder, base)
+                os.makedirs(final_folder, exist_ok=True)
 
-                for x , page in enumerate(pages):
+                for page_num, page in enumerate(pdf):
                     try:
-                        img_path = os.path.join(final_folder, f"{base}_page{x+1}.png")
-                        page.save(img_path,"PNG")
+                        pix = page.get_pixmap(matrix=matrix)
+
+                        img_path = os.path.join(
+                            final_folder,
+                            f"{base}_page{page_num + 1}.png"
+                        )
+
+                        pix.save(img_path)
                         print(f"✅ {img_path}")
+
                     except Exception as e:
-                        print(f"Error saving page {x + 1}: {e}")
+                        print(f"Error saving page {page_num + 1}: {e}")
 
-                print(f"✅ Converted {len(pages)} pages from {base} to images")
+                print(f"✅ Converted {len(pdf)} pages from {base} to images")
+                output_imgsFolder.append(final_folder)
 
-                id = uuid.uuid4().hex
-                output_imgsFolder.update({id:final_folder})
+                pdf.close()
+
             except Exception as e:
-                    print(f"Error while converting pdf {full_path}: {e}")
-                    failed_files.append({
-                        'file': original_filename,
-                        'error': get_user_friendly_error(e)
-                    })
-        
-        if output_imgsFolder:
-            print(f"\n✅ Total PDFs converted: {len(output_imgsFolder)}")
-            return {
-                "status": 'success',
-                "indicator": "tool-exception",
-                "successful_files": output_imgsFolder,
-                "failed_files": failed_files,
-                "error": error
-            }
-        else:
+                print(f"Error while converting PDF {full_path}: {e}")
+                failed_files.append({
+                    "file": original_filename,
+                    "error": get_user_friendly_error(e)
+                })
+
+        if not output_imgsFolder:
             print("Error: No PDF converted!")
             error.append("No PDFs were converted.")
             return {
-                "status": 'failed',
+                "status": "failed",
                 "successful_files": output_imgsFolder,
                 "failed_files": failed_files,
                 "error": error
             }
 
+        print(f"\n✅ Total PDFs converted: {len(output_imgsFolder)}")
+        return {
+            "status": "success",
+            "indicator": True,
+            "successful_files": output_imgsFolder,
+            "failed_files": failed_files,
+            "error": error
+        }
+
+            
     def images_to_pdf(self):
         output_files = {}
         failed_files = []
@@ -362,7 +348,7 @@ class pdf_tools:
             lines = []
             
             try:
-                pdf = fitz.open(full_path)
+                pdf = pymupdf.open(full_path)
 
                 for page in pdf:
                     text = page.get_text()

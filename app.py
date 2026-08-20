@@ -195,56 +195,69 @@ def process_files(tool_name):
     session["processed-files"] = results['successful_files']
     return jsonify(results)
 
-@app.route('/download-file/<file_id>')
-def download_file(file_id):
+@app.route('/check/file/<file_id>')
+def checkFile_ForDownload(file_id):
     if not 'output-folder' in session or not 'processed-files' in session:
-        return jsonify({'status': 'failed', 'error': 'session expired.'}), 401
-
+        return jsonify({'status': False, 'error': 'session expired.'}), 401
+    
     processed_files = session['processed-files']
 
     if file_id not in processed_files:
-        return jsonify({'status': 'failed', 'error': 'File ID not found.'}), 404
-
-    file_path = processed_files[file_id]
+        return jsonify({'status': False, 'error': 'File ID not found.'}), 404
     
+    file_path = processed_files[file_id]
+        
     if not os.path.exists(file_path):
-        return jsonify({'status': 'failed',
-                        'file': {'id':file_id,'path':file_path}, 
-                        'error': "Path does not exist."}), 404
+        return jsonify({'status': False, 'error': "Path does not exist."}), 404
 
     output_folder = os.path.abspath(session['output-folder'])
-    file_path_abs = os.path.abspath(file_path)
+    abs_file_path = os.path.abspath(file_path)
     
-    if not file_path_abs.startswith(output_folder):
-        return jsonify({'error': 'Invalid file access'}), 403
+    if not abs_file_path.startswith(output_folder):
+        return jsonify({'status': False,'error': 'Invalid file access'}), 403
 
-    filename = os.path.basename(file_path)
+    session['abs_file_path'] = abs_file_path
+    return jsonify({'status': True})
+
+@app.route('/download/file/')
+def download_file():
+    if not 'abs_file_path' in session:
+        return jsonify({'download': False, 'error': "File does not exists in session."})
+    
+    abs_file_path = session.get('abs_file_path')
+    filename = os.path.basename(abs_file_path)
 
     return send_file(
-        file_path_abs,
+        abs_file_path,
         as_attachment=True,
         download_name=filename,
     )
     
 # Working but still need some changes.
-@app.route('/download-all')
-def download_all_files():
+@app.route('/check/files/forZip')
+def checkFiles_forZipDownload():
     if not 'processed-files'in session or not 'output-folder' in session:
-        return jsonify({'status':'failed','error': 'Session expired'})
+        return jsonify({'status': False,'error': 'Session expired'})
 
-    if session.get('indicator') == "tool-exception":
-        folder_dic = session.get('processed-files')
+    folders_or_files = session.get('processed-files')
+    folders_exists = any(os.path.exists(folder) for folder in folders_or_files if session['indicator'])
 
-        for folder_id , folder in folder_dic.items():
-            if not os.path.exists(folder):
-                print(f"Folder doesn't exist: {folder}")
-                continue
+    if not folders_or_files:
+        return jsonify({'status': False,'error': 'No files provided'})
 
+    if not folders_exists: 
+        return jsonify({'status':False,'error': 'folders does not exits'})
+
+    return jsonify({'status': True})
+
+    
+@app.route('/download/all/files')
+def download_all_files():
+    if session.get('indicator'):
+        folders = session.get('processed-files')
+
+        for folder in folders:
             files = os.listdir(folder)
-
-            if not files:
-                return jsonify({'status':'failed','error': 'No files provided'})
-
             zip_in_memory = BytesIO()
 
             with zipfile.ZipFile(zip_in_memory, 'w', zipfile.ZIP_DEFLATED) as zip_file:
@@ -255,26 +268,23 @@ def download_all_files():
                         zip_file.write(file, arcname=os.path.basename(filename))
 
             zip_in_memory.seek(0)
-
-            # shutil.rmtree(folder)
-
+            zip_name = os.path.basename(folder)
             return send_file(
                 zip_in_memory,
                 mimetype='application/zip',
                 as_attachment=True,
-                download_name=f'{folder}.zip'
+                download_name=f'{zip_name}.zip'
             )
 
     
     files = session['processed-files']
-    
     if not files:
         return jsonify({'status':'failed','error': 'No files provided'})
 
     zip_in_memory = BytesIO()
 
     with zipfile.ZipFile(zip_in_memory, 'w', zipfile.ZIP_DEFLATED) as zip_file:
-        for file_id , file in files.items():
+        for file in files.values():
             if os.path.exists(file):
                 zip_file.write(file, arcname=os.path.basename(file))
 
