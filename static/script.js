@@ -333,9 +333,9 @@ async function SendAndProcessFiles(){
     const response = await fetch('/upload', {method: 'POST',body: formData})
     const data = await response.json();
    
-    if (data.status === 'success'){
+    if (data.status){
         const required_data = {
-            'files_mapping': data.files_mapping, 
+            'files_map': data.files_map, 
             'needed_arg': GetSelectedRadio()
         };     
         console.log(required_data)
@@ -348,21 +348,20 @@ async function SendAndProcessFiles(){
 }
 
 async function ProcessFiles(req_data) {
-    console.log('down',req_data)
     const response = await fetch(`/process/${TOOL_CONFIG[toolToProcess].route}`,{
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(req_data) 
-        })
+            })
 
     const process_data = await response.json();
 
-    if (process_data.status === 'success'){
+    if (process_data.status){
             console.log(process_data);      
-            handleDownload(process_data.successful_files)
-            ProcessedFiles = process_data.successful_files;
+            handleDownload(process_data.output_files)
+            ProcessedFiles = process_data.output_files;
     }else{
         console.error(process_data.error);
         ErrorBox.innerHTML = `<p id="error-message">${process_data.error}</p>`;

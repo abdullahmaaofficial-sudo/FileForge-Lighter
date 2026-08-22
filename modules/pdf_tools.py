@@ -1,5 +1,5 @@
+from PyPDF2 import PdfMerger,PdfReader,PdfWriter
 from pdf2docx import Converter
-from PyPDF2 import PdfMerger
 from PIL import Image
 import pymupdf
 import random
@@ -11,13 +11,13 @@ class BaseForTools:
     def __init__(self,paths_dic: dict, output_folder : str):
         self.Input_paths = paths_dic
         self.output_folder = output_folder
-        self.exists = self.validate_input_paths()
-        self.return_d = {'status': False,'files': self.exists,'error': "file(s) not exists in server, try to re-upload"}
+        self.not_exists = self.validate_input_paths()
+        self.return_d = {'status': False,'files': self.not_exists,'error': "file(s) not exists in server, try to re-upload"}
 
     def validate_input_paths(self):
         all_exists = all(os.path.exists(path) for path in self.Input_paths.keys())
-        if not all_exists: return [self.Input_paths[path] for path in self.Input_paths.keys() if not os.path.exists(path)]
-        return []
+        if all_exists: return []
+        return [self.Input_paths[path] for path in self.Input_paths.keys() if not os.path.exists(path)]
 
 
 class PDFTools(BaseForTools):
@@ -25,7 +25,7 @@ class PDFTools(BaseForTools):
         super().__init__(paths_dic, output_folder)
         
     def combine_pdf(self):
-        if not self.exists: return self.return_d
+        if self.not_exists: return self.return_d
 
         if not len(self.Input_paths) >= 2: 
             return {'status': False,'error': "Not enough pdf, pdf should be more than 1"}
@@ -33,7 +33,7 @@ class PDFTools(BaseForTools):
         failed_files = []
 
         pdf_num = random.randint(100,1000)
-        output_path = os.path.join(self.output_folder, f"combined pdf {pdf_num}.pdf")
+        output_path = os.path.join(self.output_folder, f"combined-pdf-{pdf_num}.pdf")
         merger = PdfMerger()
 
         for file_path , original_filename in self.Input_paths.items():
@@ -56,9 +56,8 @@ class PDFTools(BaseForTools):
             return {'status': False, 'error': 'Failed to combine pdf(s), please try again'}
         finally: merger.close()
 
-
     def pdf_to_docx(self):
-        if not self.exists: return self.return_d
+        if self.not_exists: return self.return_d
 
         output_files = {}
         failed_files = []
@@ -90,7 +89,7 @@ class PDFTools(BaseForTools):
         return {'status': True, 'output_files': output_files}
 
     def pdf_to_images(self, dpi = 200):
-        if not self.exists: return self.return_d
+        if self.not_exists: return self.return_d
 
         output_folder_dic = {}
         failed_files = []
@@ -149,7 +148,7 @@ class PDFTools(BaseForTools):
         return {'status': True, 'output_files': output_folder_dic}
 
     def images_to_pdf(self, filename = None):
-        if not self.exists: return self.return_d
+        if self.not_exists: return self.return_d
 
         failed_images = []
         loaded_images = []
@@ -161,7 +160,7 @@ class PDFTools(BaseForTools):
             try:
                 image = Image.open(img_path).convert("RGB")
                 loaded_images.append(image)
-                print(f"✅ Loaded: {os.path.basename(img_path)}")
+                print(f"Loaded: {os.path.basename(img_path)}")
             except Exception as e:
                 print(f"Error loading {img_path}: {e}")
                 failed_images.append(original_filename)
@@ -195,9 +194,9 @@ class PDFTools(BaseForTools):
                 "error": 'Failed to make a pdf, please try again',
             }
 
-
+    # The OCR will not work in production (vercel)
     def pdf_to_text(self):
-        if not self.exists: return self.return_d
+        if self.not_exists: return self.return_d
 
         output_files = {}
         failed_files = []
@@ -263,3 +262,89 @@ class PDFTools(BaseForTools):
 
     def split_pdf(self):
         ...
+
+    def compress_pdf(self):
+        if self.not_exists: return self.return_d
+
+        output_files = {}
+        failed_files = []
+
+        for file_path, original_filename in self.Input_paths.items():
+            filename = os.path.splitext(original_filename)[0]
+            output_path = os.path.join(self.output_folder, f"{filename}-compressed.pdf")
+
+            try:
+                pdf = pymupdf.open(file_path)
+                pdf.save(output_path, garbage=4, deflate=True, clean=True)
+                pdf.close()
+
+                original_size = os.path.getsize(file_path)
+                new_size = os.path.getsize(output_path)
+                saved_pct = round((1 - new_size / original_size) * 100, 1) if original_size else 0
+
+                print(f"Compressed {original_filename}: {original_size} to {new_size} bytes ({saved_pct}% saved)")
+
+                id = uuid.uuid4().hex
+                output_files.update({id: output_path})
+
+            except Exception as e:
+                print(f"Error compressing {original_filename}: {e}")
+                failed_files.append(original_filename)
+
+        if failed_files:
+            return {
+                'status': False,
+                'files': failed_files,
+                'output_files': output_files,
+                'error': 'Failed to compress these/this pdf(s), please try again'
+            }
+
+        print(f"\nTotal files compressed: {len(output_files)}")
+        return {'status': True, 'output_files': output_files}
+
+    def rotate_pdf(self, angle=90):
+        """
+        angle: rotation in degrees, must be a multiple of 90 (90, 180, 270, -90, etc.)
+        """
+        if self.not_exists: return self.return_d
+
+        if angle % 90 != 0:
+            return {'status': False, 'error': "Angle must be a multiple of 90"}
+
+        output_files = {}
+        failed_files = []
+
+        for file_path, original_filename in self.Input_paths.items():
+            filename = os.path.splitext(original_filename)[0]
+            output_path = os.path.join(self.output_folder, f"{filename}_rotated.pdf")
+
+            try:
+                reader = PdfReader(file_path)
+                writer = PdfWriter()
+
+                for page in reader.pages:
+                    page.rotate(angle)
+                    writer.add_page(page)
+
+                with open(output_path, "wb") as f:
+                    writer.write(f)
+
+                print(f"Rotated {original_filename}: by {angle}°")
+
+                id = uuid.uuid4().hex
+                output_files.update({id: output_path})
+
+            except Exception as e:
+                print(f"Error rotating {file_path}: {e}")
+                failed_files.append(original_filename)
+
+        if failed_files:
+            return {
+                'status': False,
+                'files': failed_files,
+                'output_files': output_files,
+                'error': 'Failed to rotate these/this pdf(s), please try again'
+            }
+
+        print(f"\nTotal files rotated: {len(output_files)}")
+        return {'status': True, 'output_files': output_files}
